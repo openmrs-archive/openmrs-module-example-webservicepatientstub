@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//OpenMRS//DTD OpenMRS Config 1.0//EN" "http://resources.openmrs.org/doctype/config-1.0.dtd">
+
+<module configVersion="1.0">
+	
+	<!-- WebServiceExamplePatientStub Module Properties -->
+	<id>webserviceexamplepatientstub</id>
+	<name>WebServiceExamplePatientStub</name>
+	<version>0.1</version>
+	<package>org.openmrs.module.@MODULE_ID@</package>
+	<author>Ben Wolfe</author>
+	<description>
+		This module adds an example web service exposing methods in the PatientService
+	</description>
+	<activator>@MODULE_PACKAGE@.WebServiceExamplePatientStubModuleActivator</activator>
+	<!-- /WebServiceExamplePatientStub Module Properties -->
+	
+	<require_modules>
+		<require_module>org.openmrs.module.webservice.jaxws</require_module>
+	</require_modules>
+	
+</module>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:ws="http://jax-ws.dev.java.net/spring/core"
+       xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util-2.0.xsd
+           http://jax-ws.dev.java.net/spring/core
+           http://jax-ws.dev.java.net/spring/core.xsd
+           http://jax-ws.dev.java.net/spring/servlet
+           http://jax-ws.dev.java.net/spring/servlet.xsd">
+	
+	<!-- MUST start with /ms/jaxws/ -->
+	<!-- /ms/ is the module servlet defined by openmrs that forwards to our servlet -->
+	<!-- Our webservices servlet is defined as "jaxws" in the "webservice.jaxws" module's config.xml -->
+	<wss:binding url="/ms/jaxws/patientservice" service="#patientservice" />
+    <ws:service id="patientservice" bean="#patientWebService" />
+    
+    <bean id="patientWebService" class="org.openmrs.web.ws.PatientWebService" />
+	
+</beans>
