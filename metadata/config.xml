@@ -6,7 +6,7 @@
 	<!-- WebServiceExamplePatientStub Module Properties -->
 	<id>webserviceexamplepatientstub</id>
 	<name>WebServiceExamplePatientStub</name>
-	<version>0.1</version>
+	<version>0.2</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>Ben Wolfe</author>
 	<description>
@@ -16,7 +16,12 @@
 	<!-- /WebServiceExamplePatientStub Module Properties -->
 	
 	<require_modules>
-		<require_module>org.openmrs.module.webservice.jaxws</require_module>
+		<require_module>org.openmrs.module.webservices.jaxws</require_module>
 	</require_modules>
+	
+	<servlet>
+		<servlet-name>examplestubs</servlet-name>
+		<servlet-class>com.sun.xml.ws.transport.http.servlet.WSSpringServlet</servlet-class>
+	</servlet>
 	
 </module>

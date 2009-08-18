@@ -13,7 +13,7 @@
  */
 package org.openmrs.module.webserviceexamplepatientstub.web;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -25,16 +25,14 @@ import javax.xml.ws.WebServiceContext;
 
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifierType;
-import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.webservices.WebServiceSupport;
+import org.openmrs.module.webservices.jaxws.JaxwsSupport;
 
 /**
- * This can be accessed via /openmrs/ms/jaxws/patientservice because we mapped it to
- * /ms/jaxws/patient in the /moduleApplicationContext.xml file. <br/>
+ * This can be accessed via /openmrs/ms/examplestubs/patientservice because we mapped it to
+ * /ms/examplestubs/patientservice in the /moduleApplicationContext.xml file. <br/>
  * <br/>
- * (/ms/jaxws is mapped as the JaxWS servlet by the webservice.jaxws module. This module is set as a
- * "required module" by this module.
+ * (/ms/examplestubs is mapped as the JaxWS servlet by this module.
  */
 @WebService
 @SOAPBinding(style = Style.RPC, use = Use.LITERAL)
@@ -44,20 +42,49 @@ public class PatientWebService {
 	WebServiceContext webServiceContext;
 	
 	/**
-	 * TODO: This might not be able to be a full Patient object but instead a PatientStub object
-	 * might need to be created
+	 * Get a list of PatientStubs that match the given name/identifier/identifiertype
 	 * 
 	 * @see org.openmrs.api.impl.PatientServiceImpl#getPatients(java.lang.String, java.lang.String,
 	 *      java.util.List, boolean)
 	 */
-	public Patient[] getPatients(String name, String identifier, PatientIdentifierType[] identifierTypes,
-	                             boolean matchIdentifierExactly) throws APIException {
-		WebServiceSupport.authenticate(webServiceContext);
+	public PatientStub[] getPatients(String name, String identifier, Integer[] identifierTypeIds,
+	                                 boolean matchIdentifierExactly) {
+		JaxwsSupport.authenticate(webServiceContext);
+		
+		List<PatientIdentifierType> identifierTypes = new ArrayList<PatientIdentifierType>();
+		for (Integer typeId : identifierTypeIds) {
+			identifierTypes.add(new PatientIdentifierType(typeId));
+		}
 		
 		// TODO change this return type to PatientStub??
-		List<Patient> patientsFound = Context.getPatientService().getPatients(name, identifier,
-		    Arrays.asList(identifierTypes), matchIdentifierExactly);
-		return patientsFound.toArray(new Patient[] {});
+		List<Patient> patientsFound = Context.getPatientService().getPatients(name, identifier, identifierTypes,
+		    matchIdentifierExactly);
+		
+		PatientStub[] stubsFound = new PatientStub[patientsFound.size()];
+		int x = 0;
+		for (Patient patient : patientsFound) {
+			stubsFound[x++] = getPatientStub(patient);
+		}
+		return stubsFound;
+	}
+	
+	/**
+	 * Convenience method to turn a full Patient object into a PatientStub object.
+	 * 
+	 * @param patient the patient to convert
+	 * @return the simpler PatientStub object
+	 */
+	private static PatientStub getPatientStub(Patient patient) {
+		PatientStub stub = new PatientStub();
+		stub.setPatientId(patient.getPatientId());
+		stub.setPersonId(patient.getPersonId());
+		stub.setGivenName(patient.getGivenName());
+		stub.setMiddleName(patient.getMiddleName());
+		stub.setFamilyName(patient.getFamilyName());
+		stub.setIdentfier(patient.getPatientIdentifier().getIdentifier());
+		stub.setIdentifierTypeId(patient.getPatientIdentifier().getIdentifierType().getPatientIdentifierTypeId().toString());
+		
+		return stub;
 	}
 	
 }

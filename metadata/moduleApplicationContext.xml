@@ -17,12 +17,12 @@
            http://jax-ws.dev.java.net/spring/servlet
            http://jax-ws.dev.java.net/spring/servlet.xsd">
 	
-	<!-- MUST start with /ms/jaxws/ -->
+	<!-- MUST start with /ms/examplestubs/ -->
 	<!-- /ms/ is the module servlet defined by openmrs that forwards to our servlet -->
-	<!-- Our webservices servlet is defined as "jaxws" in the "webservice.jaxws" module's config.xml -->
-	<wss:binding url="/ms/jaxws/patientservice" service="#patientservice" />
+	<!-- examplestubs is defined as the servlet to use in our confix.xml -->
+	<wss:binding url="/ms/examplestubs/patientservice" service="#patientservice" />
     <ws:service id="patientservice" bean="#patientWebService" />
     
-    <bean id="patientWebService" class="org.openmrs.web.ws.PatientWebService" />
+    <bean id="patientWebService" class="org.openmrs.module.webserviceexamplepatientstub.web.PatientWebService" />
 	
 </beans>
